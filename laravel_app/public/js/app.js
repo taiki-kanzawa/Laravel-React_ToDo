@@ -1971,8 +1971,11 @@ var TodoApp = /*#__PURE__*/function (_Component) {
 
     _this = _super.call(this);
     _this.state = {
-      todos: []
+      todos: [],
+      todo: ''
     };
+    _this.inputChange = _this.inputChange.bind(_assertThisInitialized(_this));
+    _this.addTodo = _this.addTodo.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -1990,10 +1993,60 @@ var TodoApp = /*#__PURE__*/function (_Component) {
       });
     }
   }, {
+    key: "inputChange",
+    value: function inputChange(event) {
+      switch (event.target.name) {
+        case 'todo':
+          this.setState({
+            todo: event.target.value
+          });
+          break;
+
+        default:
+          break;
+      }
+    }
+  }, {
+    key: "addTodo",
+    value: function addTodo() {
+      var _this3 = this;
+
+      if (this.state.todo == '') {
+        return;
+      }
+
+      axios.post('/api/add', {
+        title: this.state.todo
+      }).then(function (res) {
+        _this3.setState({
+          todos: res.data,
+          todo: ''
+        });
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("table", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          className: "form-group mt-4",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+            htmlFor: "todo",
+            children: "\u65B0\u898FTodo"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+            type: "text",
+            className: "form-control",
+            name: "todo",
+            value: this.state.todo,
+            onChange: this.inputChange
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+          className: "btn btn-primary",
+          onClick: this.addTodo,
+          children: "\u767B\u9332"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("table", {
           className: "table mt-5",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("thead", {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
@@ -2010,7 +2063,7 @@ var TodoApp = /*#__PURE__*/function (_Component) {
               todos: this.state.todos
             })
           })]
-        })
+        })]
       });
     }
   }]);
